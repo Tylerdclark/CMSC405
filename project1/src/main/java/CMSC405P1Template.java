@@ -7,8 +7,6 @@ package main.java;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
@@ -17,11 +15,13 @@ public class CMSC405P1Template extends JPanel {
 
   static int translateX = 0;
   static int translateY = 0;
-  static double rotation = 0.0;
+  static double rotation = -Math.toRadians(90); //for some reason the image is initializing 90 degrees turned
   static double scaleX = 1.0;
   static double scaleY = 1.0;
   ImageTemplate myImages = new ImageTemplate();
   BufferedImage tImage = myImages.getImage(ImageTemplate.letterT);
+  BufferedImage yImage = myImages.getImage(ImageTemplate.letterY);
+  BufferedImage exclamationImage = myImages.getImage(ImageTemplate.exclamationMark);
   // A counter that increases by one in each frame.
   private int frameNumber;
   // The time, in milliseconds, since the animation started.
@@ -55,17 +55,14 @@ public class CMSC405P1Template extends JPanel {
     // Modified to change timing and allow for recycling
     animationTimer =
         new Timer(
-            1600,
-            new ActionListener() {
-              public void actionPerformed(ActionEvent arg0) {
-                if (panel.frameNumber > 3) {
-                  panel.frameNumber = 0;
-                } else {
-                  panel.frameNumber++;
-                }
-                panel.elapsedTimeMillis = System.currentTimeMillis() - startTime;
-                panel.repaint();
+            1600, arg0 -> {
+              if (panel.frameNumber > 5) {
+                panel.frameNumber = 0;
+              } else {
+                panel.frameNumber++;
               }
+              panel.elapsedTimeMillis = System.currentTimeMillis() - startTime;
+              panel.repaint();
             });
     window.setVisible(true); // Open the window, making it visible on the screen.
     animationTimer.start(); // Start the animation running.
@@ -98,51 +95,66 @@ public class CMSC405P1Template extends JPanel {
      * transformed coordinate system.
      */
     // Controls your zoom and area you are looking at
-    applyWindowToViewportTransformation(g2, -75, 75, -75, 75, true);
+    applyWindowToViewportTransformation(g2, -100, 100, -100, 100, true);
 
     AffineTransform savedTransform = g2.getTransform();
-    System.out.println("Frame is " + frameNumber);
     switch (frameNumber) {
       case 1: // First frame is unmodified.
         translateX = 0;
         translateY = 0;
         scaleX = 1.0;
         scaleY = 1.0;
-        rotation = 0;
+        rotation = -Math.toRadians(90);
+        System.out.println(" Baseline");
         break;
       case 2: // Second frame translates each image by (-9, 5).
-        translateX = -9;
-        translateY = 5;
+        translateX = -5;
+        translateY = 7;
+        System.out.println(" Translate -5, 7");
         break;
-      case 3: // Third frame rotates each image by 60 degrees Counter
-        translateX = -9;
-        translateY = 5;
-        rotation = 60 * Math.PI / 180.0;
+      case 3: // Third frame rotates each image by 45 degrees
+        translateX = 0;
+        translateY = 0;
+        rotation = Math.toRadians(45);
+        System.out.println(" Rotate 45");
         break;
-        // Can add more cases as needed
+      case 4:
+        rotation = Math.toRadians(90);
+        System.out.println(" Rotate 90");
+        break;
+      case 5:
+        scaleX = 2;
+        scaleY = 0.5;
+        System.out.println(" Scale X and Y");
+        break;
       default:
         break;
     } // End switch
     g2.translate(translateX, translateY); // Move image.
-    // To offset translate again
-    g2.translate(-10, 10);
     g2.rotate(rotation); // Rotate image.
     g2.scale(scaleX, scaleY); // Scale image.
     g2.drawImage(tImage, 0, 0, this); // Draw image.
     g2.setTransform(savedTransform);
 
     // Add another T image
-    g2.translate(translateX, translateY+10); // Move image.
+    g2.translate(translateX, translateY); // Move image.
     // To offset translate again
     // This allows you to place your images across your graphic
-    g2.translate(-30, 30);
+    g2.translate(30, 0);
     g2.rotate(rotation); // Rotate image.
     g2.scale(scaleX, scaleY); // Scale image.
-    g2.drawImage(tImage, 0, 0, this); // Draw image.
+    g2.drawImage(yImage, 0, 0, this); // Draw image.
     g2.setTransform(savedTransform);
 
-    // You can add more shapes/images as needed
-    //
+    // Add another T image
+    g2.translate(translateX, translateY); // Move image.
+    // To offset translate again
+    // This allows you to place your images across your graphic
+    g2.translate(60, 0);
+    g2.rotate(rotation); // Rotate image.
+    g2.scale(scaleX, scaleY); // Scale image.
+    g2.drawImage(exclamationImage, 0, 0, this); // Draw image.
+    g2.setTransform(savedTransform);
 
   }
 
