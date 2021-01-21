@@ -55,7 +55,7 @@ public class CMSC405P1Template extends JPanel {
     // Modified to change timing and allow for recycling
     animationTimer =
         new Timer(
-            1600, arg0 -> {
+            1000, arg0 -> {
               if (panel.frameNumber > 5) {
                 panel.frameNumber = 0;
               } else {
@@ -95,7 +95,7 @@ public class CMSC405P1Template extends JPanel {
      * transformed coordinate system.
      */
     // Controls your zoom and area you are looking at
-    applyWindowToViewportTransformation(g2, -100, 100, -100, 100, true);
+    applyWindowToViewportTransformation(g2, -45, 75, -75, 75, true);
 
     AffineTransform savedTransform = g2.getTransform();
     switch (frameNumber) {
