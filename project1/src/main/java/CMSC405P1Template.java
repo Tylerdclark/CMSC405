@@ -55,7 +55,7 @@ public class CMSC405P1Template extends JPanel {
     // Modified to change timing and allow for recycling
     animationTimer =
         new Timer(
-            1000, arg0 -> {
+            1500, arg0 -> {
               if (panel.frameNumber > 5) {
                 panel.frameNumber = 0;
               } else {
@@ -95,7 +95,7 @@ public class CMSC405P1Template extends JPanel {
      * transformed coordinate system.
      */
     // Controls your zoom and area you are looking at
-    applyWindowToViewportTransformation(g2, -45, 75, -75, 75, true);
+    applyWindowToViewportTransformation(g2, 10, 75, -75, 75, true);
 
     AffineTransform savedTransform = g2.getTransform();
     switch (frameNumber) {
@@ -113,13 +113,11 @@ public class CMSC405P1Template extends JPanel {
         System.out.println(" Translate -5, 7");
         break;
       case 3: // Third frame rotates each image by 45 degrees
-        translateX = 0;
-        translateY = 0;
-        rotation = Math.toRadians(45);
+        rotation = - Math.toRadians(45);
         System.out.println(" Rotate 45");
         break;
       case 4:
-        rotation = Math.toRadians(90);
+        rotation = Math.toRadians(180);
         System.out.println(" Rotate 90");
         break;
       case 5:
@@ -130,6 +128,11 @@ public class CMSC405P1Template extends JPanel {
       default:
         break;
     } // End switch
+
+    /* todo: REMEMBER!!! When rotating, we are rotating the origin of drawing! so all the funky things that are happening
+    with the translation is because they are translating after the rotation!!! don't forget.
+    * */
+
     g2.translate(translateX, translateY); // Move image.
     g2.rotate(rotation); // Rotate image.
     g2.scale(scaleX, scaleY); // Scale image.
@@ -140,7 +143,7 @@ public class CMSC405P1Template extends JPanel {
     g2.translate(translateX, translateY); // Move image.
     // To offset translate again
     // This allows you to place your images across your graphic
-    g2.translate(30, 0);
+    g2.translate(50, 0);
     g2.rotate(rotation); // Rotate image.
     g2.scale(scaleX, scaleY); // Scale image.
     g2.drawImage(yImage, 0, 0, this); // Draw image.
@@ -150,7 +153,7 @@ public class CMSC405P1Template extends JPanel {
     g2.translate(translateX, translateY); // Move image.
     // To offset translate again
     // This allows you to place your images across your graphic
-    g2.translate(60, 0);
+    g2.translate(100, 0);
     g2.rotate(rotation); // Rotate image.
     g2.scale(scaleX, scaleY); // Scale image.
     g2.drawImage(exclamationImage, 0, 0, this); // Draw image.
