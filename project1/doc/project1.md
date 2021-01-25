@@ -3,42 +3,29 @@
 **Author:** Tyler D Clark  
 **Date:** 23 January 2021
 
-**Description** A program that simulates traffic using swing GUI, event handlers, listeners and incorporates Java’s concurrency functionality and the use of threads. The program first prompts for the number of column and row roads and initial cars. It then creates a canvas and allows the the traffic simulation to be started, paused, stopped and additional cars to be added.
+**Description** A program that create 3 simple images from 2 dimensional arrays and then draws them. The program then translates, rotates and scales them using Java 2D.
 
 ___
 
 ## File Layout
 
 ``` bash
+|____out
+| |____project1.jar
 |____doc
-| |____project3.md
-|-----out
-| |_____project3.jar
+| |____img
+| |____project1.md
 |____src
 | |____META-INF
 | | |____MANIFEST.MF
-| |____dev
-| | |____tylerdclark
-| | | |____traffic
-| | | | |____Road.java
-| | | | |____NorthSouthRoad.java
-| | | | |____TrafficLight.java
-| | | | |____EastWestRoad.java
-| | | | |____Car.java
-| | | |____util
-| | | | |____Timer.java
-| | | | |____LightStatus.java
-| | | |____gui
-| | | | |____BackgroundCanvas.java
-| | | | |____MenuPanel.java
-| | | | |____MainFrame.java
-| | | | |____App.java
-| | | | |____InitialPanel.java
+| |____main
+| | |____java
+| | | |____PixelImage.java
+| | | |____App.java
+| | | |____Project1.java
 ```
 
 ## UML Diagram
-
-It's very busy looking!
 
 ![UML class diagram](img/diagram.png)
 
@@ -47,7 +34,7 @@ It's very busy looking!
 This program was compiled into a jar file for ease of use. The only requirement for this program is an up-to-date Java runtime to be installed on the machine. To run this program, simply enter the command while in the out directory:
 
 ``` bash
-java -jar project3.jar
+java -jar project1.jar
 ```
 
 Screenshot:
@@ -55,47 +42,34 @@ Screenshot:
 
 ## Testing the Program
 
-The following sections will test the program's functionality to start various simulations, pause and stop them.
+The following sections will test the program's various functionalities. Each test correlates to the frame number of the program's animation.
+
+|Test Case|Java 2D Graphics Transformation Method|Expected Output|Actual Output|Pass/Fail
+|---|---|---|---|---|
+|1|None - images unaffected| Original images|Original images|Pass|
+|2|translate()| Translate -5 in x direction, Translate +7 in the y direction|Translate -5 in x direction, Translate +7 in the y direction|Pass|
+|3|rotate()|Rotate 45° counter clockwise|Rotate 45° counter clockwise|Pass|
+|4|rotate()|Rotate 90° clockwise|Rotate 90° clockwise|Pass|
+|5|scale()|Scale 2 times for the x component, scale 0.5 times for the y component|Scale 2 times for the x component, scale 0.5 times for the y component|Pass|
+
+## Screenshots
 
 ### Test case 1
-
-The first test case will simply test the programs ability to start a traffic simulation with 2 row roads and 2 column roads and 2 cars. These are the default options of the initial panel.
-
-Screenshot:
-![simulation](img/ss2.png)
+![Unchanged](img/ss2.png)
+The original images without transformations
 
 ### Test case 2
-
-This test will test the ability of the program to start. After pressing "Start, the timer will begin counting and every second the cars will move (unless they are at a red light). The cars will move a random amount that is set in their constructor.
-
-Screenshot:
-![simulation](img/ss3.png)
+![translated](img/ss3.png)
+The images translated (-5, 7)
 
 ### Test case 3
-
-The pause is a boolean inside the timer object that is passed to all Threads. This test case shows that when the "pause" is set to true by the JButton, all worker pause.
-
-Screenshot of starting pause:
-![simulation](img/ss4.png)
-
-Screenshot of a bit after pause is pressed:
-![simulation](img/ss5.png)
+![rotated](img/ss4.png)
+The images rotated 45° counter clockwise
 
 ### Test case 4
-
-The Stop button replaces the JPanel that is being drawn to with a new one with matching starting conditions of the previous one. The cars are still randomly placed. This test case will test that Stop does create a new canvas and it will also test add new random cars using the "Add a car" JButton.
-
-After pressing "Stop", new canvas:
-![simulation](img/ss7.png)
-
-Adding a few cars:
-![simulation](img/ss8.png)
+![rotated 2](img/ss5.png)
+The images rotated 90° clockwise
 
 ### Test case 5
-
-This test case will test the max options in the initial panel. This simulation is to have 10 rows, 10 columns and 10 initial cars
-
-A busy-looking simulation with 111 SwingWorkers:
-![simulation](img/ss10.png)
-
-## Discussion / Lessons learned / Conclusion
+![scaled](img/ss6.png)
+The images scaled 2 times for the x component, scale 0.5 times for the y component
