@@ -167,6 +167,7 @@ public class JoglStarter extends JPanel implements
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();  // Tells which key was pressed.
         // TODO:  Add code to respond to key presses.
+        System.out.println(key);
         display.repaint();  // Causes the display() function to be called.
     }
 
@@ -178,6 +179,7 @@ public class JoglStarter extends JPanel implements
     public void keyTyped(KeyEvent e) { 
         char ch = e.getKeyChar();  // Which character was typed.
         // TODO:  Add code to respond to the character being typed.
+        System.out.println(ch);
         display.repaint();  // Causes the display() function to be called.
     }
 

@@ -34,15 +34,15 @@ public class FourLights extends JPanel implements GLEventListener {
         window.setVisible(true);
     }
 
-    private JCheckBox animating;  // Checked if animation is running.
+    private final JCheckBox animating;  // Checked if animation is running.
 
-    private JCheckBox viewpointLight;  // Checked if the white viewpoint light is on.
-    private JCheckBox redLight;  // Checked if the red light is on.
-    private JCheckBox greenLight;  // Checked if the green light is on.
-    private JCheckBox blueLight;  // Checked if the blue light is on.
-    private JCheckBox ambientLight;  // Checked if the global ambient light is on.
+    private final JCheckBox viewpointLight;  // Checked if the white viewpoint light is on.
+    private final JCheckBox redLight;  // Checked if the red light is on.
+    private final JCheckBox greenLight;  // Checked if the green light is on.
+    private final JCheckBox blueLight;  // Checked if the blue light is on.
+    private final JCheckBox ambientLight;  // Checked if the global ambient light is on.
     
-    private JCheckBox drawBase; // Checked if the base should be drawn.
+    private final JCheckBox drawBase; // Checked if the base should be drawn.
 
     private GLJPanel display;
     private Timer animationTimer;
@@ -130,7 +130,7 @@ public class FourLights extends JPanel implements GLEventListener {
     private void lights(GL2 gl) {
 
         gl.glColor3d(0.5,0.5,0.5);
-        float zero[] = { 0, 0, 0, 1 };
+        float[] zero = { 0, 0, 0, 1 };
         gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_SPECULAR, zero, 0);
         
         if (viewpointLight.isSelected())
