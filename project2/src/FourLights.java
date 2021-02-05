@@ -44,14 +44,14 @@ public class FourLights extends JPanel implements GLEventListener {
     
     private final JCheckBox drawBase; // Checked if the base should be drawn.
 
-    private GLJPanel display;
-    private Timer animationTimer;
+    private final GLJPanel display;
+    private final Timer animationTimer;
 
     private int frameNumber = 0;  // The current frame number for an animation.
 
-    private Camera camera;
+    private final Camera camera;
 
-    private GLUT glut = new GLUT();
+    private final GLUT glut = new GLUT();
 
     /**
      * The constructor adds seven checkboxes under the display, to control the options.
@@ -67,11 +67,9 @@ public class FourLights extends JPanel implements GLEventListener {
         camera.lookAt(5,10,30, 0,0,0, 0,1,0);
         camera.setScale(15);
         camera.installTrackball(display);
-        animationTimer = new Timer(30, new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                frameNumber++;
-                display.repaint();
-            }
+        animationTimer = new Timer(30, evt -> {
+            frameNumber++;
+            display.repaint();
         });
         ActionListener boxHandler = new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
@@ -139,7 +137,7 @@ public class FourLights extends JPanel implements GLEventListener {
             gl.glDisable(GL2.GL_LIGHT0);
         
         if (redLight.isSelected()) {
-            float red[] = { 0.5F, 0, 0, 1 };
+            float[] red = { 0.5F, 0, 0, 1 };
             gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_EMISSION, red, 0);  
             gl.glEnable(GL2.GL_LIGHT1);
         }
@@ -155,7 +153,7 @@ public class FourLights extends JPanel implements GLEventListener {
         gl.glPopMatrix();
         
         if (greenLight.isSelected()) {
-            float green[] = {0, 0.5F, 0, 1 };
+            float[] green = {0, 0.5F, 0, 1 };
             gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_EMISSION, green, 0); 
             gl.glEnable(GL2.GL_LIGHT2);
         }
@@ -171,7 +169,7 @@ public class FourLights extends JPanel implements GLEventListener {
         gl.glPopMatrix();
         
         if (blueLight.isSelected()) {
-            float blue[] = { 0, 0, 0.5F, 1 };
+            float[] blue = { 0, 0, 0.5F, 1 };
             gl.glMaterialfv(GL2.GL_FRONT_AND_BACK, GL2.GL_EMISSION, blue, 0); 
             gl.glEnable(GL2.GL_LIGHT3);
         }
@@ -259,7 +257,7 @@ public class FourLights extends JPanel implements GLEventListener {
 
         lights(gl);
 
-        float zero[] = { 0, 0, 0, 1 };
+        float[] zero = { 0, 0, 0, 1 };
 
         if (ambientLight.isSelected()) {
             gl.glLightModelfv(GL2.GL_LIGHT_MODEL_AMBIENT, new float[] { 0.15F, 0.15F, 0.15F, 1 }, 0 );
@@ -302,24 +300,24 @@ public class FourLights extends JPanel implements GLEventListener {
         gl.glLightModeli(GL2.GL_LIGHT_MODEL_LOCAL_VIEWER, 1);
         gl.glMateriali(GL2.GL_FRONT_AND_BACK, GL2.GL_SHININESS, 32);
 
-        float dim[] = { 0.5F, 0.5F, 0.5F, 1 };
+        float[] dim = { 0.5F, 0.5F, 0.5F, 1 };
         gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_DIFFUSE, dim, 0);
         gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_SPECULAR, dim, 0);
 
-        float red[] =  { 0.5F, 0, 0, 1};
-        float reda[] = { 0.1F, 0, 0, 1};
+        float[] red =  { 0.5F, 0, 0, 1};
+        float[] reda = { 0.1F, 0, 0, 1};
         gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_AMBIENT, reda, 0);
         gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_DIFFUSE, red, 0);
         gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_SPECULAR, red, 0);
 
-        float gr[] = { 0, 0.5F, 0, 1 };
-        float gra[] = { 0, 0.1F, 0, 1 };
+        float[] gr = { 0, 0.5F, 0, 1 };
+        float[] gra = { 0, 0.1F, 0, 1 };
         gl.glLightfv(GL2.GL_LIGHT2, GL2.GL_AMBIENT, gra, 0);
         gl.glLightfv(GL2.GL_LIGHT2, GL2.GL_DIFFUSE, gr, 0);
         gl.glLightfv(GL2.GL_LIGHT2, GL2.GL_SPECULAR, gr, 0);
 
-        float bl[] = {0, 0, 0.5F, 1};
-        float bla[] = {0, 0, 0.1F, 1};
+        float[] bl = {0, 0, 0.5F, 1};
+        float[] bla = {0, 0, 0.1F, 1};
         gl.glLightfv(GL2.GL_LIGHT3, GL2.GL_AMBIENT, bla, 0);
         gl.glLightfv(GL2.GL_LIGHT3, GL2.GL_DIFFUSE, bl, 0);
         gl. glLightfv(GL2.GL_LIGHT3, GL2.GL_SPECULAR, bl, 0);
