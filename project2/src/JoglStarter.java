@@ -5,7 +5,11 @@ import java.awt.event.*;
 import javax.swing.*;
 import com.jogamp.opengl.*;
 import com.jogamp.opengl.awt.GLJPanel;
+import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.gl2.GLUT;  // for drawing GLUT objects (such as the teapot)
+
+import static com.jogamp.opengl.GL.GL_LINES;
+
 
 /**
  * A template for a basic JOGL application with support for animation, and for
@@ -17,48 +21,52 @@ import com.jogamp.opengl.util.gl2.GLUT;  // for drawing GLUT objects (such as th
  * Note that this program is based on JOGL 2.3, which has some differences
  * from earlier versions; in particular, some of the package names have changed.
  */
-public class JoglStarter extends JPanel implements 
+public class JoglStarter extends GLJPanel implements
                    GLEventListener, KeyListener, MouseListener, MouseMotionListener, ActionListener {
 
     public static void main(String[] args) {
         JFrame window = new JFrame("JOGL");
         JoglStarter panel = new JoglStarter();
         window.setContentPane(panel);
-        /* TODO: If you want to have a menu, comment out the following line. */
-        //window.setJMenuBar(panel.createMenuBar());
+        window.setJMenuBar(panel.createMenuBar());
         window.pack();
         window.setLocation(50,50);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setVisible(true);
     }
     
-    private GLJPanel display;
+    private final GLJPanel display;
     private Timer animationTimer;
 
     private int frameNumber = 0;  // The current frame number for an animation.
-    
-    private GLUT glut = new GLUT();  // TODO: For drawing GLUT objects, otherwise, not needed.
+    private final GLUT glut = new GLUT();  // TODO: For drawing GLUT objects, otherwise, not needed.
 
     public JoglStarter() {
         GLCapabilities caps = new GLCapabilities(null);
         display = new GLJPanel(caps);
-        display.setPreferredSize( new Dimension(600,600) );  // TODO: set display size here
+        display.setPreferredSize( new Dimension(600,600) );
         display.addGLEventListener(this);
         setLayout(new BorderLayout());
         add(display,BorderLayout.CENTER);
-        // TODO:  Other components could be added to the main panel.
-        
-        // TODO:  Uncomment the next two lines to enable keyboard event handling
-        //requestFocusInWindow();
-        //addKeyListener(this);
+        requestFocusInWindow();
+        addKeyListener(this);
+        display.addMouseListener(this);
+        display.addMouseMotionListener(this);
 
-        // TODO:  Uncomment the next one or two lines to enable mouse event handling
-        //display.addMouseListener(this);
-        //display.addMouseMotionListener(this);
-        
         //TODO:  Uncomment the following line to start the animation
-        //startAnimation();
+        startAnimation();
 
+    }
+
+    // draw the floor
+    private void drawFloor(GL2 gl) {
+        gl.glBegin(GL2.GL_QUADS);
+        gl.glColor3f(1, 0, 0);
+        gl.glVertex3f(-1000.0f, 0.0f, 1000.0f);
+        gl.glVertex3f( 1000.0f, 0.0f, 1000.0f);
+        gl.glVertex3f( 1000.0f, 0.0f, -1000.0f);
+        gl.glVertex3f(-1000.0f, 0.0f, -1000.0f);
+        gl.glEnd();
     }
 
     // ---------------  Methods of the GLEventListener interface -----------
@@ -66,10 +74,10 @@ public class JoglStarter extends JPanel implements
     /**
      * This method is called when the OpenGL display needs to be redrawn.
      */
-    public void display(GLAutoDrawable drawable) {    
-            // called when the panel needs to be drawn
+    public void display(GLAutoDrawable drawable) {
 
         GL2 gl = drawable.getGL().getGL2();
+
         gl.glClearColor(0,0,0,0);
         gl.glClear( GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT ); // TODO? Omit depth buffer for 2D.
 
@@ -81,6 +89,14 @@ public class JoglStarter extends JPanel implements
         gl.glLoadIdentity();             // Set up modelview transform. 
 
         // TODO: add drawing code here!!
+        gl.glPushMatrix();
+        drawFloor(gl);
+
+        gl.glColor3f( 1, 0, 0 ); // red
+        glut.glutSolidCube( .2f);
+        gl.glPopMatrix();
+        // second object to draw
+
 
     }
 
@@ -98,10 +114,11 @@ public class JoglStarter extends JPanel implements
         // TODO: Uncomment the following 4 lines to do some typical initialization for 
         // lighting and materials.
 
-        // gl.glEnable(GL2.GL_LIGHTING);        // Enable lighting.
-        // gl.glEnable(GL2.GL_LIGHT0);          // Turn on a light.  By default, shines from direction of viewer.
-        // gl.glEnable(GL2.GL_NORMALIZE);       // OpenGL will make all normal vectors into unit normals
-        // gl.glEnable(GL2.GL_COLOR_MATERIAL);  // Material ambient and diffuse colors can be set by glColor*
+        gl.glEnable(GL2.GL_LIGHTING);        // Enable lighting.
+        gl.glEnable(GL2.GL_LIGHT0);          // Turn on a light.  By default, shines from direction of viewer.
+        gl.glEnable(GL2.GL_NORMALIZE);       // OpenGL will make all normal vectors into unit normals
+        gl.glEnable(GL2.GL_COLOR_MATERIAL);  // Material ambient and diffuse colors can be set by glColor*
+
     }
 
     /**
@@ -142,7 +159,7 @@ public class JoglStarter extends JPanel implements
     /**
      * A class to define the ActionListener object that will respond to menu commands.
      */
-    private class MenuHandler implements ActionListener {
+    private static class MenuHandler implements ActionListener {
         public void actionPerformed(ActionEvent evt) {
             String command = evt.getActionCommand();  // The text of the command.
             if (command.equals("Quit")) {
@@ -165,7 +182,7 @@ public class JoglStarter extends JPanel implements
      * function key.
      */
     public void keyPressed(KeyEvent e) {
-        int key = e.getKeyCode();  // Tells which key was pressed.
+        char key = e.getKeyChar();  // Tells which key was pressed.
         // TODO:  Add code to respond to key presses.
         System.out.println(key);
         display.repaint();  // Causes the display() function to be called.
@@ -273,13 +290,19 @@ public class JoglStarter extends JPanel implements
         int x = evt.getX();  // mouse location in pixel coordinates.
         int y = evt.getY();
         // TODO:  respond to mouse drag to new point (x,y)
+
+        System.out.println("x: "+ x + ", y: "+y);
         prevX = x;
         prevY = y;
         display.repaint();
     }
 
     public void mouseMoved(MouseEvent evt) { }    // Other methods required for MouseListener, MouseMotionListener.
-    public void mouseClicked(MouseEvent evt) { }
+    public void mouseClicked(MouseEvent evt) {
+        int x = evt.getX();  // mouse location in pixel coordinates.
+        int y = evt.getY();
+        System.out.println("x: "+ x + ", y: "+y);
+    }
     public void mouseEntered(MouseEvent evt) { }
     public void mouseExited(MouseEvent evt) { }
 
