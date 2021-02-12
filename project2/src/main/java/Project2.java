@@ -7,6 +7,8 @@
  * *****************************************************************************
  */
 
+package main.java;
+
 import com.jogamp.opengl.*;
 import com.jogamp.opengl.awt.GLJPanel;
 import com.jogamp.opengl.fixedfunc.GLLightingFunc;
@@ -19,10 +21,14 @@ import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
 import java.awt.event.*;
 
+/*
+ * also contains 2 nested classes for the input handlers
+ */
 public class Project2 {
 
     /** Main here */
     public static void main(final String[] args) {
+
         final Frame frame = new Frame();
         final GLJPanel panel = new GLJPanel();
         final Renderer renderer = new Renderer();
@@ -35,8 +41,7 @@ public class Project2 {
 
         panel.addGLEventListener(renderer);
         frame.add(panel);
-        frame.add(panel);
-        frame.setSize(600, 600);
+        frame.setSize(640, 480);
         final Animator animator = new Animator(panel);
         frame.addWindowListener(new WindowAdapter() {
             public void windowClosing(final WindowEvent e) {
@@ -80,9 +85,11 @@ public class Project2 {
             gl.glLoadIdentity();
 
             glu.gluLookAt(0, 5, 10, 0, 0, 0, 0, 1, 0);
-
             gl.glTranslatef(tranX, tranY, 0);
 
+            //Beware: lot of hard-coded values ahead
+
+            /*Rectangle*/
             gl.glPushMatrix();
             gl.glRotatef(rotY, 1.0f, 0.0f, 0);
             gl.glRotatef(rotX, 0.0f, 1.0f, 0);
@@ -90,7 +97,7 @@ public class Project2 {
             gl.glScalef(scaleAll, scaleAll / 10, scaleAll);
             glut.glutSolidCube(.5f);
             gl.glPopMatrix();
-
+            /*Sphere*/
             gl.glPushMatrix();
             gl.glScalef(scaleAll / 10, scaleAll / 10, scaleAll / 10);
             gl.glRotatef(rotY, 1.0f, 0.0f, 0.0f);
@@ -99,7 +106,7 @@ public class Project2 {
             gl.glColor3d(0.251, 0.878, 0.816);
             glut.glutSolidSphere(0.5, 100, 100);
             gl.glPopMatrix();
-
+            /*Torus aka donut*/
             gl.glPushMatrix();
             gl.glScalef(scaleAll / 10, scaleAll / 10, scaleAll / 10);
             gl.glRotatef(rotY, 1.0f, 0.0f, 0.0f);
@@ -108,18 +115,17 @@ public class Project2 {
             gl.glColor3d(1.000, 0.000, 1.000);
             glut.glutSolidTorus(.2, .5, 100, 100);
             gl.glPopMatrix();
-
+            /*Cylinder*/
             gl.glPushMatrix();
             gl.glScalef(scaleAll / 10, scaleAll / 10, scaleAll / 10);
             gl.glRotatef(rotY, 1.0f, 0.0f, 0.0f);
             gl.glRotatef(rotX, 0.0f, 1.0f, 0.0f);
             gl.glTranslatef(1.75f, 0.5f, -2);
             gl.glRotatef(-90, 1.0f, 0.0f, 0.0f);
-
             gl.glColor3d(1.000, 0.627, 0.478);
             glut.glutSolidCylinder(.5, 1, 100, 100);
             gl.glPopMatrix();
-
+            /*Cone*/
             gl.glPushMatrix();
             gl.glScalef(scaleAll / 10, scaleAll / 10, scaleAll / 10);
             gl.glRotatef(rotY, 1.0f, 0.0f, 0.0f);
@@ -129,7 +135,7 @@ public class Project2 {
             gl.glColor3d(0.000, 1.000, 0.498);
             glut.glutSolidCone(.5, 1, 100, 100);
             gl.glPopMatrix();
-
+            /*Big word shape*/
             gl.glPushMatrix();
             gl.glScalef(scaleAll / 10, scaleAll / 10, scaleAll / 10);
             gl.glRotatef(rotY, 1.0f, 0.0f, 0.0f);
