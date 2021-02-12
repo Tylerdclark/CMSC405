@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement />
+  <nodes>
+    <node x="0.0" y="80.0">main.java.Project2.MouseHandler</node>
+    <node x="162.0" y="80.0">main.java.Project2.KeyHandler</node>
+    <node x="308.0" y="80.0">main.java.Project2.Renderer</node>
+    <node x="169.5" y="0.0">main.java.Project2</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="main.java.Project2.Renderer" target="main.java.Project2">
+      <point x="0.0" y="-15.0" />
+      <point x="363.5" y="55.0" />
+      <point x="262.0" y="55.0" />
+      <point x="37.0" y="15.0" />
+    </edge>
+    <edge source="main.java.Project2.KeyHandler" target="main.java.Project2">
+      <point x="0.0" y="-15.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="main.java.Project2.MouseHandler" target="main.java.Project2">
+      <point x="0.0" y="-15.0" />
+      <point x="71.0" y="55.0" />
+      <point x="188.0" y="55.0" />
+      <point x="-37.0" y="15.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="209.5" y="55.0" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Inner Classes</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
