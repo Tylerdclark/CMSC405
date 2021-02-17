@@ -35,3 +35,7 @@ project2/lib/
 project2/.idea/
 
 project2/project2.iml
+
+project3/node_modules/
+
+project3/build/bundle.js
