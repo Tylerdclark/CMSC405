@@ -39,3 +39,5 @@ project2/project2.iml
 project3/node_modules/
 
 project3/build/bundle.js
+
+project3/.idea/
