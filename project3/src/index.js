@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { BufferGeometry } from "three";
 import "./modal"; //for the modal menu
 
 ("use strict");
@@ -7,64 +8,35 @@ let scene, camera, renderer; // Three.js rendering basics.
 
 let canvas; // The canvas on which the image is rendered.
 
-let model; // Contains the visible objects in the scene, but
-// not the lights or camera.  The model can be
-// rotated using the keyboard.
-
-// Nodes in the scene graphs that are modified as part of the animation:
-let sphereRotator; // The sphere is a child of this object; rotating
-// this object about the y-axis rotates the sphere.
-
 let animating = false; // This is set to true when an animation is running.
+
+let frame = 0; //Do stuff based on frame
+let deleted = 0; //just for debugging 
+
+let obstacles = [];
 
 /*  Create the scene graph.  This function is called once, as soon as the page loads.
  *  The renderer has already been created before this function is called.
  */
 const createWorld = () => {
-    //renderer.setClearColor(0x444444); // Set background color (0x444444 is dark gray).
+    //////////////////// Scene set-up //////////////////////
     scene = new THREE.Scene();
-
-    // create a camera, sitting on the positive z-axis.  The camera is not part of the scene.
     camera = new THREE.PerspectiveCamera(
-        45,
+        60,
         canvas.width / canvas.height,
-        1,
-        30
+        0.1,
+        1000
     );
-    camera.position.z = 15;
+    camera.position.z = 400;
 
-    // create some lights and add them to the scene.
+    //////////////////// Light up the scene //////////////////////
+
     scene.add(new THREE.DirectionalLight(0xffffff, 0.4)); // dim light shining from above
     const viewpointLight = new THREE.DirectionalLight(0xffffff, 0.8); // a light to shine in the direction the camera faces
     viewpointLight.position.set(0, 0, 1); // shines down the z-axis
     scene.add(viewpointLight);
 
-    // create the model
-    //model = new THREE.Object3D();
- 
-    const points = new THREE.Geometry();
-
-    while(points.vertices.length < 1000) {
-      let x = 2 * Math.random() -1;
-      let y = 2 * Math.random() -1;
-      let z = 2 * Math.random() -1;
-      
-      if (x*x + y*y + z*z < 1) {
-        points.vertices.push(new THREE.Vector3(x, y, z))
-      }
-      
-    }
-    const pointMaterial = new THREE.PointsMaterial( {
-      color: "yellow",
-      size: 2,
-      sizeAttenuation: false
-  } );
-    const sphereOfPoints = new THREE.Points(points, pointMaterial);
-    scene.add(sphereOfPoints)
-
-    //model.rotation.set(0.2, 0, 0); // Tip it forward a bit, so we're not looking at it edge-on.
-
-    //scene.add(model);
+    //scene.add();
 };
 
 /*  Render the scene.  This is called for each frame of the animation.
@@ -78,7 +50,45 @@ const render = () => {
  *  for that frame.
  */
 const updateForFrame = () => {
-    sphereRotator.rotation.y += 0.03;
+    //////////////////// Create some stuff //////////////////////
+
+    for (let i = 0; i < Math.log2(frame); i++) {
+        obstacles.push(
+            getSquare(getRandFunction(-200, 200), getRandFunction(-200, 200))
+        );
+    }
+
+    //////////////////// Add the stuff to scene //////////////////////
+    obstacles.forEach((obj) => {
+        scene.add(obj);
+    });
+
+    obstacles.forEach((obj) => {
+        obj.rotation.x += 0.05;
+        obj.rotation.y += 0.05;
+        obj.rotation.z += 0.05;
+        obj.position.z += 5;
+    });
+
+    obstacles = obstacles.filter((obj) => {
+        const withinZ = obj.position.z < 450;
+
+        camera.updateMatrix();
+        camera.updateMatrixWorld();
+        var frustum = new THREE.Frustum();
+        frustum.setFromProjectionMatrix(
+            new THREE.Matrix4().multiplyMatrices(
+                camera.projectionMatrix,
+                camera.matrixWorldInverse
+            )
+        );
+        if (frustum.containsPoint(obj) && withinZ) {
+            return obj;
+        } else {
+            dispose3(obj);
+            console.log(`objects: ${obstacles.length}, deleted: ${++deleted}`);
+        }
+    });
 };
 
 //--------------------------- animation support -----------------------------------
@@ -90,9 +100,12 @@ const updateForFrame = () => {
  */
 const doFrame = () => {
     if (animating) {
-        updateForFrame();
-        render();
-        requestAnimationFrame(doFrame);
+        setTimeout(() => {
+            updateForFrame();
+            render();
+            requestAnimationFrame(doFrame);
+            frame++;
+        }, 10);
     }
 };
 
@@ -115,29 +128,29 @@ const doAnimateCheckbox = () => {
  */
 const doKey = (event) => {
     const code = event.keyCode;
+    console.log(`${event.key} = ${event.code}`);
     let rotated = true;
     switch (code) {
         case 37:
-          
-            model.rotation.y -= 0.03;
+            cube.rotation.y -= 0.03;
             break; // left arrow
         case 39:
-            model.rotation.y += 0.03;
+            cube.rotation.y += 0.03;
             break; // right arrow
         case 38:
-            model.rotation.x -= 0.03;
+            cube.rotation.x -= 0.03;
             break; // up arrow
         case 40:
-            model.rotation.x += 0.03;
+            cube.rotation.x += 0.03;
             break; // down arrow
         case 33:
-            model.rotation.z -= 0.03;
+            cube.rotation.z -= 0.03;
             break; // page up
         case 34:
-            model.rotation.z += 0.03;
+            cube.rotation.z += 0.03;
             break; // page down
         case 36:
-            model.rotation.set(0.2, 0, 0);
+            cube.rotation.set(0.2, 0, 0);
             break; // home
         default:
             rotated = false;
@@ -169,6 +182,7 @@ const init = () => {
             "<h3><b>Sorry, WebGL is required but is not available.</b><h3>";
         return;
     }
+
     document.addEventListener("keydown", doKey, false);
     document.getElementById("animate").checked = false;
     document.getElementById("animate").onchange = doAnimateCheckbox;
@@ -179,7 +193,92 @@ const init = () => {
     render();
 };
 
+/**
+ * Produces a pseudo anaglyph cube
+ * @param {*} x horizontal
+ * @param {*} y vertical
+ */
+const getSquare = (x, y) => {
+    const weirdSquare = new THREE.Object3D();
+    // Make a cube.
+    const geometry = new THREE.BoxGeometry(1, 1, 1);
 
+    // Make a material
+    const whiteMaterial = new THREE.MeshBasicMaterial({
+        color: 0xffffff,
+        wireframe: true,
+    });
+
+    const redMaterial = new THREE.MeshBasicMaterial({
+        color: "red",
+        wireframe: true,
+    });
+
+    const blueMaterial = new THREE.MeshBasicMaterial({
+        color: "cyan",
+        wireframe: true,
+    });
+
+    // Create a mesh based on the geometry and material
+    const whiteMesh = new THREE.Mesh(geometry, whiteMaterial);
+    const redMesh = new THREE.Mesh(geometry, redMaterial);
+    const blueMesh = new THREE.Mesh(geometry, blueMaterial);
+
+    redMesh.position.x -= 0.1;
+    redMesh.position.y += 0.1;
+    blueMesh.position.x += 0.1;
+    blueMesh.position.y -= 0.1;
+
+    weirdSquare.add(whiteMesh);
+    weirdSquare.add(redMesh);
+    weirdSquare.add(blueMesh);
+
+    weirdSquare.position.x = x;
+    weirdSquare.position.y = y;
+
+    return weirdSquare;
+};
+
+/**
+ * A way to set a range for random numbers
+ * @param {*} min minimum number, can be negative
+ * @param {*} max max number
+ */
+const getRandFunction = (min, max) =>
+    Math.floor(Math.random() * (max - min)) + min;
+
+/**
+ * Disposes the object from the scene
+ * @param {*}  obj to remove
+ */
+const dispose3 = (obj) => {
+    let children = obj.children;
+    let child;
+
+    if (children) {
+        for (let i = 0; i < children.length; i += 1) {
+            child = children[i];
+
+            dispose3(child);
+        }
+    }
+
+    let geometry = obj.geometry;
+    let material = obj.material;
+
+    if (geometry) {
+        geometry.dispose();
+    }
+
+    if (material) {
+        let texture = material.map;
+
+        if (texture) {
+            texture.dispose();
+        }
+
+        material.dispose();
+    }
+};
 
 window.addEventListener("load", init, false);
-
