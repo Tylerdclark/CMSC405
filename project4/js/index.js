@@ -48,17 +48,9 @@ const draw = () => {
     pushMatrix();
     mat4.translate(modelview,modelview,[0,-5,0]);
     mat4.rotate(modelview,modelview, (Math.PI / 180) , [0,0,0]);
-    mat4.scale(modelview, modelview, [10, 0.5, 10])
+    mat4.scale(modelview, modelview, [10, 1, 10])
     currentColor = [0,0.4,0.8,1];
     cubeMdl.render();
-    popMatrix();
-
-    pushMatrix();
-    mat4.translate(modelview,modelview,[0,0,0]);
-    mat4.rotate(modelview,modelview, (Math.PI / 180) * -90 , [1,0,0]);
-    mat4.scale(modelview, modelview, [2, 2, 2])
-    currentColor = [0.8,0.6,0.9,1];
-    coneMdl.render();
     popMatrix();
     
     castle();
@@ -347,6 +339,6 @@ const init = () => {
     rotator = new TrackballRotator(canvas, () => {
         if (!animating)
            draw();
-    },17,[0,1,2]); 
+    },40,[0,0,2]); 
     draw();
 }
