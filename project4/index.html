@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<html>
+<head>
+<title>Project 4 - Tyler D Clark</title>
+<link rel="stylesheet" href="./static/styles.css">
+<link rel="icon" type="image/jpg" href="./static/favicon.ico"/>
+
+<script src="./js/gl-matrix-min.js"></script>
+<script src="./js/trackball-rotator.js"></script>
+<script src="./js/basic-object-models-IFS.js"></script>
+<script src="./js/shader-source.js"></script>
+<script src="./js/index.js"></script>
+</head>
+<body onload="init()">
+
+<h2 class="centered">Project 4 - Tyler D Clark</h2>
+
+
+<noscript><hr><h3>This page requires Javascript and a web browser that supports WebGL</h3><hr></noscript>
+
+<p id="message" class="centered" style="font-weight:bold">Drag your mouse on the model to rotate it.
+Make sure to try the animation, and let it run long enough to see the nighttime view!</p>
+
+<p>
+   <label><input type="checkbox" id="animCheck" onchange="setAnimating(this.checked)"> Animate </label>
+   <button id="reset" style="margin-left:25px">Reset</button>
+</p>
+<div>
+    <canvas width=600 height=480 id="webglcanvas" style="background-color:blue"></canvas>
+</div>
+</body>
+</html>
