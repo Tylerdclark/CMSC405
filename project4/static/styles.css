@@ -1,0 +1,27 @@
+html {
+    color: #fff;
+    background-color: #222426;
+}
+body {
+    background-color: #303235;
+}
+
+button {
+    color: #fff;
+    background-color: #222426;
+}
+label {
+    white-space: pre;
+    margin-left: 25px;
+}
+canvas {
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+.centered {
+    text-align: center
+}
