@@ -1,33 +1,67 @@
 <!DOCTYPE html>
 <meta charset="UTF-8">
-<html>
-<head>
-<title>Project 4 - Tyler D Clark</title>
-<link rel="stylesheet" href="./static/styles.css">
-<link rel="icon" type="image/jpg" href="./static/favicon.ico"/>
+<html lang="en">
 
-<script src="./js/gl-matrix-min.js"></script>
-<script src="./js/trackball-rotator.js"></script>
-<script src="./js/basic-object-models-IFS.js"></script>
-<script src="./js/shader-source.js"></script>
-<script src="./js/index.js"></script>
+<head>
+    <title>Project 4 - Tyler D Clark</title>
+    <link rel="stylesheet" href="./static/styles.css">
+    <link rel="icon" type="image/jpg" href="./static/favicon.ico" />
+    <!-- An absolute life saver for debugging webgl -->
+    <script src="https://greggman.github.io/webgl-lint/webgl-lint.js" crossorigin></script>
+    <!-- Libs -->
+    <script src="./js/gl-matrix-min.js"></script>
+    <script src="./js/trackball-rotator.js"></script>
+    <script src="./js/basic-object-models-IFS.js"></script>
+    <!-- src js files -->
+    <script src="./js/shader-source.js"></script>
+    <script src="./js/index.js"></script>
 </head>
+
 <body onload="init()">
 
-<h2 class="centered">Project 4 - Tyler D Clark</h2>
+    <h2 id="centered">Project 4 - Tyler D Clark</h2>
+
+    <p>
+        <label><input type="checkbox" id="animCheck" onchange="setAnimating(this.checked)"> Animate </label>
+        <label><input type="checkbox" id="lighting" onchange="setLighting(this.checked)"> Lighting </label>
+        <label><input type="checkbox" id="doorCheck" onchange="setDoor(this.checked)"> Door </label>
+        <label><input type="checkbox" id="groundCheck" onchange="setGround(this.checked)"> Ground </label>
+        <button id="reset" style="margin-left:25px">Reset</button>
+    </p>
+    <p id="message"></p>
+    <div>
+        <canvas width=700 height=700 id="webglcanvas" style="background-color:blue">
+            Your browser doesn't appear to support the HTML5 <code>&lt;canvas&gt;</code> element.
+        </canvas>
+    </div>
 
 
-<noscript><hr><h3>This page requires Javascript and a web browser that supports WebGL</h3><hr></noscript>
+    <h3>Directional light:</h3>
 
-<p id="message" class="centered" style="font-weight:bold">Drag your mouse on the model to rotate it.
-Make sure to try the animation, and let it run long enough to see the nighttime view!</p>
+    <table style="border: 0; padding: 10px;">
+        <tr>
+            <td><b>Direction:</b>
+            <td>X: <input type="text" id="lightDirectionX" value="-0.25" onchange="draw()"/>
+            <td>Y: <input type="text" id="lightDirectionY" value="-0.25" onchange="draw()"/>
+            <td>Z: <input type="text" id="lightDirectionZ" value="-1.0" onchange="draw()"/>
+        </tr>
+        <tr>
+            <td><b>Color:</b>
+            <td>R: <input type="text" id="directionalR" value="0.8" onchange="draw()"/>
+            <td>G: <input type="text" id="directionalG" value="0.8" onchange="draw()"/>
+            <td>B: <input type="text" id="directionalB" value="0.8" onchange="draw()"/>
+        </tr>
+    </table>
 
-<p>
-   <label><input type="checkbox" id="animCheck" onchange="setAnimating(this.checked)"> Animate </label>
-   <button id="reset" style="margin-left:25px">Reset</button>
-</p>
-<div>
-    <canvas width=700 height=700 id="webglcanvas" style="background-color:blue"></canvas>
-</div>
+    <h3>Ambient light:</h3>
+    <table style="border: 0; padding: 10px;">
+        <tr>
+            <td><b>Color:</b>
+            <td>R: <input type="text" id="ambientR" value="1" onchange="draw()"/>
+            <td>G: <input type="text" id="ambientG" value="1" onchange="draw()"/>
+            <td>B: <input type="text" id="ambientB" value="1" onchange="draw()"/>
+        </tr>
+    </table>
 </body>
+
 </html>
